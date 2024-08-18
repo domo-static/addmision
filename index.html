@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #success-message {
+            display: none;
+        }
+        
+        #spinner {
+            border: 4px solid rgba(0, 0, 0, .1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-semibold mb-6 text-center">Admission Form</h1>
+        <div id="spinner" class="hidden"></div>
+        <form id="admission-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Student's Name</label>
+                <input type="text" id="student-name" required class="mt-1 p-2 border rounded w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Guardian's Name</label>
+                <input type="text" id="guardian-name" required class="mt-1 p-2 border rounded w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                <input type="date" id="dob" required class="mt-1 p-2 border rounded w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" required class="mt-1 p-2 border rounded w-full">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="tel" id="phone-number" required class="mt-1 p-2 border rounded w-full">
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4">Submit</button>
+        </form>
+        <div id="success-message" class="text-center text-green-500 mt-4">
+            Successfully filled the form
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('admission-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Show spinner
+            document.getElementById('spinner').classList.remove('hidden');
+
+            const studentName = document.getElementById('student-name').value;
+            const guardianName = document.getElementById('guardian-name').value;
+            const dob = document.getElementById('dob').value;
+            const email = document.getElementById('email').value;
+            const phoneNumber = document.getElementById('phone-number').value;
+
+            const emailBody = `
+                <p>Student's Name: ${studentName}</p>
+                <p>Guardian's Name: ${guardianName}</p>
+                <p>Date of Birth: ${dob}</p>
+                <p>Email: ${email}</p>
+                <p>Phone Number: ${phoneNumber}</p>
+            `;
+
+            fetch('https://backend.buildpicoapps.com/aero/run/self-email-api?pk=v1-Z0FBQUFBQm13Y1V5S2d6MVZxeXBnS3pzdjR5VTg3bXhMdEVGVVcyOV9veE9uVElGSVFLYWc5eUFBNlkzQkVhYUtIc2dqSFRIWHBFaGR5OFB3VThJTlJyRVVkMzFRRk9uWmc9PQ==', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    subject: 'New Admission Form Submission',
+                    body: emailBody
+                })
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error(error));
+
+            // Display success message
+            document.getElementById('success-message').style.display = 'block';
+
+            // Hide the message and reset the form after 10 seconds
+            setTimeout(function() {
+                document.getElementById('success-message').style.display = 'none';
+                document.getElementById('admission-form').reset();
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
