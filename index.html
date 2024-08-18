@@ -26,41 +26,34 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen bg-gray-100">
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+<body class="flex items-center justify-center h-screen bg-black text-white">
+    <div class="bg-black p-8 rounded shadow-md w-full max-w-md">
         <h1 class="text-2xl font-semibold mb-6 text-center">Admission Form</h1>
         <div id="spinner" class="hidden"></div>
         <form id="admission-form" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700">Student's Name</label>
+                <label class="block text-sm font-medium text-white">Student's Name</label>
                 <input type="text" id="student-name" required class="mt-1 p-2 border rounded w-full">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Guardian's Name</label>
+                <label class="block text-sm font-medium text-white">Guardian's Name</label>
                 <input type="text" id="guardian-name" required class="mt-1 p-2 border rounded w-full">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                <label class="block text-sm font-medium text-white">Date of Birth</label>
                 <input type="date" id="dob" required class="mt-1 p-2 border rounded w-full">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <label class="block text-sm font-medium text-white">Email</label>
                 <input type="email" id="email" required class="mt-1 p-2 border rounded w-full">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <label class="block text-sm font-medium text-white">Phone Number</label>
                 <input type="tel" id="phone-number" required class="mt-1 p-2 border rounded w-full">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Mode of Admission</label>
-                <select id="mode-of-admission" required class="mt-1 p-2 border rounded w-full">
-                    <option value="online">Online</option>
-                    <option value="offline">Offline</option>
-                </select>
             </div>
             <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4">Submit</button>
         </form>
-        <div id="success-message" class="text-center text-green-500 mt-4">
+        <div id="success-message" class="text-center text-green-500 mt-4" style="display: none;">
             Successfully filled the form
         </div>
     </div>
@@ -78,10 +71,7 @@
             const email = document.getElementById('email').value;
             const phoneNumber = document.getElementById('phone-number').value;
 
-            const modeOfAdmission = document.getElementById('mode-of-admission').value;
-            
             const emailBody = `
-                <p>Mode of Admission: ${modeOfAdmission}</p>
                 <p>Student's Name: ${studentName}</p>
                 <p>Guardian's Name: ${guardianName}</p>
                 <p>Date of Birth: ${dob}</p>
@@ -98,19 +88,26 @@
                     subject: 'New Admission Form Submission',
                     body: emailBody
                 })
-            }).then(response => response.json())
-              .then(data => console.log(data))
-              .catch(error => console.error(error));
+            }).then(response => {
+                // Hide spinner
+                document.getElementById('spinner').classList.add('hidden');
 
-            // Display success message
-            document.getElementById('success-message').style.display = 'block';
+                // Display success message
+                document.getElementById('success-message').style.display = 'block';
 
-            // Hide the message and reset the form after 10 seconds
-            setTimeout(function() {
-                document.getElementById('success-message').style.display = 'none';
-                document.getElementById('admission-form').reset();
-            }, 10000);
-        });
+                // Hide the message and reset the form after 10 seconds
+                setTimeout(function() {
+                    document.getElementById('success-message').style.display = 'none';
+                    document.getElementById('admission-form').reset();
+                }, 10000);
+            }).catch(error => {
+                // Hide spinner
+                document.getElementById('spinner').classList.add('hidden');
+                
+                console.error(error);
+            });
+    });
     </script>
 </body>
 </html>
+
