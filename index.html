@@ -51,6 +51,13 @@
                 <label class="block text-sm font-medium text-gray-700">Phone Number</label>
                 <input type="tel" id="phone-number" required class="mt-1 p-2 border rounded w-full">
             </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Mode of Admission</label>
+                <select id="mode-of-admission" required class="mt-1 p-2 border rounded w-full">
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                </select>
+            </div>
             <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4">Submit</button>
         </form>
         <div id="success-message" class="text-center text-green-500 mt-4">
@@ -71,7 +78,10 @@
             const email = document.getElementById('email').value;
             const phoneNumber = document.getElementById('phone-number').value;
 
+            const modeOfAdmission = document.getElementById('mode-of-admission').value;
+            
             const emailBody = `
+                <p>Mode of Admission: ${modeOfAdmission}</p>
                 <p>Student's Name: ${studentName}</p>
                 <p>Guardian's Name: ${guardianName}</p>
                 <p>Date of Birth: ${dob}</p>
